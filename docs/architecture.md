@@ -204,6 +204,6 @@ Evaluation data must be held out from training and tuning. Where the dataset has
 4. Build a baseline evaluation pipeline and document its split and metrics.
 5. Implement the model adapter and API response contract.
 6. Build the React upload and report experience against the API.
-7. Integrate, check the acceptance criteria, document setup and limitations, and benchmark on the intended hardware.
+7. Integrate, check the acceptance criteria, document setup and limitations, and benchmark on the intended hardware.x
 
 The sequence keeps early technical risks visible: dataset-label mismatch, audio codec support, and model runtime should be learned before the UI implies capabilities the backend cannot provide.
