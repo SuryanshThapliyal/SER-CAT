@@ -1,0 +1,39 @@
+# Local environment configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Dataset downloads, recordings, and scratch inspection artifacts
+/work/
+/data/
+/datasets/
+/artifacts/
+
+# Model weights and checkpoints
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# JavaScript
+node_modules/
+dist/
+build/
+.vite/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
