@@ -32,11 +32,13 @@ The intended users are people conducting research or exploring a business use ca
 
 The system reports estimates based on vocal audio. Its output must not be presented as certain knowledge of what a speaker feels.
 
-## 4. Emotion labels
+## 4. Emotion labels and prediction target
 
-The intended categories include **anger, frustration, happiness, and sadness**. The final label set depends on the selected training/evaluation dataset and the model approach. Before implementation, verify which labels the chosen dataset actually provides.
+The first model will predict the **emotion the actor was instructed to portray** in the dataset. This is an operational dataset label; it does not establish what the actor actually felt or what every listener would perceive.
 
-If frustration is not directly represented in the selected dataset, do not imply that the model has been independently trained and validated to recognize frustration. Document any label mapping or defer that category. Consider including **neutral** if supported by the dataset so the model can represent speech without a strong emotion signal.
+For the initial CREMA-D experiment, use four actor-intended categories: **anger, happiness, sadness, and neutral**. CREMA-D does not provide a frustration label, so frustration is deferred. Do not relabel anger as frustration. Disgust and fear are present in CREMA-D but are outside the first model's target set.
+
+Use the emotion encoded in the reviewed dataset manifest/filename as the target. The crowd-sourced `VoiceVote` annotations describe what raters perceived and shall not replace the actor-intended training target. Exclude the confirmed all-zero sad-labeled recording from training and document it in the data-quality manifest.
 
 ## 5. Functional requirements
 
@@ -50,12 +52,13 @@ If frustration is not directly represented in the selected dataset, do not imply
 | FR-6 | The system shall produce estimates for the supported emotion labels and expose model confidence in the report. |
 | FR-7 | The system shall display an analysis report with graphs summarizing the result. The exact graph types will be specified during design. |
 | FR-8 | The system shall communicate that emotion outputs are model estimates and not a diagnosis or definitive assessment of a person. |
+| FR-9 | The system shall detect empty or near-silent audio and report that no usable speech was detected instead of assigning an emotion. |
 
 ## 6. Quality and evaluation requirements
 
 ### 6.1 Model evaluation
 
-- **Primary target:** approximately **0.70 macro F1** on held-out evaluation data.
+- **Primary target:** approximately **0.70 macro F1** across the four supported actor-intended categories on held-out-speaker evaluation data.
 - Report the dataset, label definitions/mappings, data split method, and evaluation results so the score can be interpreted and reproduced.
 - Include per-class results and a confusion matrix alongside macro F1 where practical. Accuracy alone is not the target because class imbalance can hide poor performance on less common emotions.
 - Results are dependent on the dataset and evaluation setup; the target is not a promise of performance on arbitrary real-world recordings.
@@ -70,8 +73,9 @@ If frustration is not directly represented in the selected dataset, do not imply
 
 - The first prototype analyzes uploaded files only; streaming is deferred.
 - Analysis is limited to the first five minutes of any longer file.
-- The final supported audio formats, emotion labels, model, and graph designs remain design decisions.
-- Model performance will be measured against a defined dataset and held-out split, not assumed to generalize to every speaker, recording condition, or customer-support interaction.
+- The four initial emotion labels are decided; supported audio formats, model choice, and graph design remain design decisions.
+- The model predicts dataset actor-intended categories, not a person's confirmed internal feeling or the emotion every listener will perceive.
+- Model performance will be measured against a defined dataset and speaker-disjoint held-out split, not assumed to generalize to every speaker, recording condition, or customer-support interaction.
 
 ## 8. Acceptance criteria
 
@@ -81,12 +85,13 @@ The prototype is acceptable when:
 2. The report displays the supported emotion estimates, confidence information, and graphs.
 3. A recording longer than five minutes is limited to its first five minutes and the user is informed.
 4. Unsupported, corrupted, or unreadable files produce a clear error rather than an unhandled failure.
-5. Evaluation is performed on held-out data, with the dataset, labels, and method documented; macro F1 is reported and a score around 0.70 is the project target.
+5. Evaluation uses actor-intended labels and held-out speakers; the dataset, labels, exclusions, and method are documented; macro F1 is reported and a score around 0.70 is the project target.
 6. The interface makes clear that the output is an estimate of vocal emotion, not a mental-health diagnosis or definitive reading of a person.
+7. Empty or near-silent input returns a no-usable-speech message and no emotion prediction.
 
 ## 9. Open decisions for design
 
-- Which dataset and label set will be used, and whether frustration can be supported directly.
+- Whether a later dataset can support a separately trained frustration category.
 - Which common audio formats beyond MP3 will be supported.
 - Which model and baseline will be compared, and what hardware will be used for evaluation.
 - Which graphs best communicate the recording-level results.

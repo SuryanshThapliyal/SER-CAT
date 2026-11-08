@@ -118,7 +118,7 @@ Example response (illustrative; exact labels and fields can change with the mode
 }
 ```
 
-The example omits frustration because it may not be represented by the selected dataset. The final response must only advertise labels the chosen model was trained and evaluated to predict. Scores should be described as model scores or confidence estimates; they are not automatically calibrated probabilities.
+The example omits frustration because CREMA-D has no frustration label. The final response must only advertise labels the chosen model was trained and evaluated to predict. Scores should be described as model scores or confidence estimates; they are not automatically calibrated probabilities.
 
 ### Error response shape
 
@@ -162,7 +162,9 @@ class EmotionPredictor:
 
 Keep model loading separate from per-request prediction. The implementation may use an MFCC plus SVM baseline and compare it with a pretrained speech representation such as Wav2Vec2, as described in the project roadmap. Do not choose a winner based only on one score: record macro F1, per-class F1, confusion matrix, split strategy, runtime, and relevant limitations.
 
-Evaluation data must be held out from training and tuning. Where the dataset has multiple recordings from each speaker, use a speaker-independent split if feasible to reduce speaker leakage. Dataset licensing, label definitions, class balance, and the meaning of any mappings (especially frustration) must be documented before interpreting results.
+The first CREMA-D model predicts actor-intended categories from the reviewed dataset manifest: anger, happiness, sadness, and neutral. Do not train against the crowd-sourced `VoiceVote` as if it were the actor-intended label. These are different targets. Exclude the confirmed all-zero recording and record the exclusion. Reject empty or near-silent user input without returning an emotion.
+
+Evaluation data must be held out from training and tuning. Split by actor ID so no actor appears across train, validation, and test, reducing speaker leakage. Use a fixed, documented seed and inspect per-class counts in each partition. Dataset licensing, label definitions, class balance, and label exclusions must be documented before interpreting results.
 
 ## 7. Frontend responsibilities
 
@@ -188,7 +190,8 @@ Evaluation data must be held out from training and tuning. Where the dataset has
 |---|---|---|
 | Interaction mode | Uploaded files only | None for the first prototype; streaming is deferred. |
 | Maximum analyzed duration | First 300 seconds | Confirmed by SRS. |
-| Emotion labels | Anger, frustration, happiness, sadness; neutral if supported | Select dataset and map labels honestly. Frustration may need to be deferred. |
+| Model target | Actor-intended emotion | Decided: use CREMA-D's actor-directed labels, not listener `VoiceVote` annotations. |
+| First emotion labels | Anger, happiness, sadness, neutral | Decided: frustration is deferred because CREMA-D does not label it; fear and disgust are outside the initial four-class model. |
 | Formats | MP3 plus candidates WAV and FLAC | Verify decoder and packaging support. |
 | Model | Baseline then compare a pretrained speech model | Confirm with dataset suitability and compute constraints. |
 | Graphs | Per-label score chart; optional segment chart | Decide whether the selected model supports meaningful segments. |
@@ -198,12 +201,12 @@ Evaluation data must be held out from training and tuning. Where the dataset has
 
 ## 10. Implementation sequence
 
-1. Confirm project assumptions and select a dataset/label strategy.
+1. Create a reviewed CREMA-D manifest using actor-intended labels; flag the malformed filename and exclude the all-zero audio clip.
 2. Create the repository skeleton, README, ignore rules, and Python/JavaScript dependency setup.
 3. Implement and inspect a minimal audio decoding spike for the proposed formats, duration, truncation, and corrupt-file behavior.
 4. Build a baseline evaluation pipeline and document its split and metrics.
 5. Implement the model adapter and API response contract.
 6. Build the React upload and report experience against the API.
-7. Integrate, check the acceptance criteria, document setup and limitations, and benchmark on the intended hardware.x
+7. Integrate, check the acceptance criteria, document setup and limitations, and benchmark on the intended hardware.
 
 The sequence keeps early technical risks visible: dataset-label mismatch, audio codec support, and model runtime should be learned before the UI implies capabilities the backend cannot provide.

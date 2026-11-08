@@ -4,7 +4,7 @@
 **Dataset inspected:** Audio-only CREMA-D WAV archive and official processed rating tables
 **Inspection date:** 2026-10-29
 
-This is a dataset-quality and label audit, not a model result. No model was trained. The dataset was downloaded to `work/crema_d/` for this inspection and is not part of the application source.
+This is a dataset-quality and label audit, not a model result. No model was trained. **Project decision:** the first model predicts actor-intended categories from CREMA-D. The dataset was downloaded to `work/crema_d/` for this inspection and is not part of the application source.
 
 ## 1. Dataset overview
 
@@ -45,11 +45,11 @@ Labels parsed from the clip names (the emotion the actor was directed to perform
 | Sad | 1,271 |
 | **Total** | **7,442** |
 
-The target categories **anger, happiness, sadness, and neutral** all exist as intended labels. **Frustration does not.** Do not rename anger as frustration: those are different categories and this dataset does not validate that mapping.
+The first model will use four actor-intended categories: **anger, happiness, sadness, and neutral**. The all-zero sad-labeled recording is excluded, leaving 1,270 sad clips before any train/validation/test split. **Frustration is not labeled.** Do not rename anger as frustration. Disgust and fear are present but are outside this first four-class model.
 
 ## 4. Human-perceived voice labels are different
 
-The official processed `summaryTable.csv` has a `VoiceVote` field for the most-selected audio-only human rating. Across 7,442 clips, the table contains:
+The official processed `summaryTable.csv` has a `VoiceVote` field for the most-selected audio-only human rating. These votes are **not the training target** for this project; they record what raters perceived, while the selected target is what actors were instructed to portray. They are useful context for the limits of the dataset. Across 7,442 clips, the table contains:
 
 | Voice vote | Clips |
 |---|---:|
@@ -61,23 +61,23 @@ The official processed `summaryTable.csv` has a `VoiceVote` field for the most-s
 | Happiness | 353 |
 | Multiple tied labels | 644 |
 
-Comparing the actor-directed category in the filename with a **single-label** voice vote gives an exact match on **3,099 / 7,442 clips (41.6%)**. This audit calculation is not necessarily identical to the paper’s recognition metric. Per intended category, the exact match rates were anger 60.6%, neutral 95.7%, fear 32.0%, disgust 27.0%, happiness 26.0%, and sadness 16.4%.
+Comparing the actor-directed category in the filename with a **single-label** voice vote gives an exact match on **3,099 / 7,442 clips (41.6%)**. This audit calculation is not necessarily identical to the paper’s recognition metric. Per intended category, the exact match rates were anger 60.6%, neutral 95.7%, fear 32.0%, disgust 27.0%, happiness 26.0%, and sadness 16.4%. This comparison does not change the chosen training target; it shows that intended labels are not equivalent to perceived emotion.
 
-This is a major target-definition decision. If the project predicts the actor’s intended performance label, it can use the balanced filename categories, but that target is not the same as what listeners perceive. If the project predicts perceived vocal emotion, the voice votes are more relevant, but the labels are strongly imbalanced and **644 clips have ties**. The project must choose and document one target before training. A reasonable next step is to compare (a) intended labels and (b) high-consensus voice-vote labels, while excluding ambiguous/tied ratings in the latter experiment and reporting how many examples remain. The CREMA-D paper reports that intended emotion recognition from audio alone is challenging and that rater disagreement is meaningful, not simply annotation corruption. [CREMA-D paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC4313618/)
+The model target is now fixed as actor-intended emotion. Train and evaluate against the actor-directed labels only; retain `VoiceVote` solely for analysis and discussion. The CREMA-D paper reports that intended emotion recognition from audio alone is challenging and that rater disagreement is meaningful, not simply annotation corruption. The model must be described as predicting the dataset's intended expression category, not a speaker's confirmed internal state or a guaranteed listener perception. [CREMA-D paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC4313618/)
 
 ## 5. Leakage and evaluation plan
 
 - Split by **actor ID**, never by random clip. All clips from one actor must stay in exactly one of train, validation, or test. Random clip splitting can leak a person’s voice into both training and test data and overstate generalization. [IEMOCAP evaluation study](https://sail.usc.edu/publications/files/Antoniou-ICASSP2023.pdf)
 - CREMA-D uses only 12 sentence prompts. A speaker-disjoint split prevents actor overlap, but does not prove generalization to new wording. Record this limitation; consider a sentence-held-out diagnostic if the split allows it.
 - Choose the speaker groups with a fixed seed, inspect per-class counts and actor demographics in each partition, then freeze the split before model tuning. Do not use the sorted-actor split in the scratch inspection output as the project’s final split.
-- Do not report only one macro-F1 number. Report per-class precision/recall/F1, a confusion matrix, the split protocol, the target definition (intended vs perceived), and the excluded/ambiguous examples.
+- Do not report only one macro-F1 number. Report per-class precision/recall/F1, a confusion matrix, the speaker-disjoint split protocol, actor-intended target definition, and excluded examples.
 - A held-out-speaker score on this acted, short-utterance dataset is not a guarantee of performance on spontaneous customer speech, other languages, microphones, or recording conditions.
 
 ## 6. Recommendation
 
-CREMA-D is large enough for the first controlled experiment and has enough actors to make a speaker-independent split feasible. It is **not a clean answer to the project’s target by itself**: frustration is absent, perceived labels differ substantially from intended labels, the perceived labels are imbalanced, and one silent file is mislabeled by its intended filename category.
+CREMA-D is large enough for the first controlled experiment and has enough actors to make a speaker-independent split feasible. It supports the four selected actor-intended categories, but has no frustration label. Human-perceived labels differ substantially from intended labels, and one silent file is labeled as intended sad in the filename.
 
-Before training, decide whether the prototype’s target is **actor-intended expression** or **human-perceived vocal emotion**. For the project purpose (estimating what emotion a listener might hear), test perceived voice-vote labels with an explicit agreement threshold and retain neutral as a category; keep ambiguous votes out of hard-label training or evaluate a soft-label approach separately. Remove the confirmed all-zero file from emotion training and keep a manifest explaining why.
+Before training, build and review a manifest for the four actor-intended categories. Use the filename's intended emotion field, correcting the known `1040_ITH_SAD_X.wav` filename inconsistency against the official metadata. Exclude `1076_MTI_SAD_XX.wav` because it contains no audio signal. Keep the reason for each correction or exclusion in the manifest. Split by actor ID and freeze the split before model tuning.
 
 ## 7. Scratch artifacts
 

@@ -16,7 +16,7 @@ Live streaming, speaker identification/diarization, and automatic personalizatio
 
 ## Current dataset findings
 
-CREMA-D is under evaluation for the initial model experiment. It contains 91 actors and six actor-intended labels, but no frustration label. Human-perceived voice ratings differ from the intended labels for many clips. See the dataset inspection report before defining training labels or evaluation splits.
+The first model will predict actor-intended emotion labels from CREMA-D: anger, happiness, sadness, and neutral. Listener `VoiceVote` ratings are not the training target. Frustration is deferred because CREMA-D does not label it. See the dataset inspection report for the silent clip exclusion and speaker-disjoint evaluation requirements.
 
 ## Local setup
 
