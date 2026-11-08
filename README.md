@@ -13,14 +13,15 @@ Live streaming, speaker identification/diarization, and automatic personalizatio
 - [Software Requirements Specification](docs/requirements.md)
 - [Proposed Architecture and Design](docs/architecture.md)
 - [CREMA-D Dataset Inspection](docs/crema-d-inspection.md)
+- [MFCC + SVM Baseline Results](docs/baseline-results.md)
 
 ## Current dataset findings
 
-The first model will predict actor-intended emotion labels from CREMA-D: anger, happiness, sadness, and neutral. Listener `VoiceVote` ratings are not the training target. Frustration is deferred because CREMA-D does not label it. See the dataset inspection report for the silent clip exclusion and speaker-disjoint evaluation requirements.
+The first model predicts actor-intended emotion labels from CREMA-D: anger, happiness, sadness, and neutral. Listener `VoiceVote` ratings are not the training target. Frustration is deferred because CREMA-D does not label it. The initial held-out-speaker MFCC + SVM baseline scored 0.623 macro F1; details and limitations are in the baseline report.
 
 ## Local setup
 
-Application code and dependency setup have not been added yet. When local configuration is needed, copy `.env.example` to `.env`; keep credentials and machine-specific settings in `.env`. The `.env` file is ignored by Git.
+Frontend and backend application code have not been added yet. ML environment setup is documented in `ml/README.md`. When local configuration is needed, copy `.env.example` to `.env`; keep credentials and machine-specific settings in `.env`. The `.env` file is ignored by Git.
 
 ## Data and generated files
 

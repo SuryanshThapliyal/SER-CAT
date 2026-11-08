@@ -4,7 +4,7 @@
 **Dataset inspected:** Audio-only CREMA-D WAV archive and official processed rating tables
 **Inspection date:** 2026-10-29
 
-This is a dataset-quality and label audit, not a model result. No model was trained. **Project decision:** the first model predicts actor-intended categories from CREMA-D. The dataset was downloaded to `work/crema_d/` for this inspection and is not part of the application source.
+This document records the dataset-quality and label audit. The first MFCC + SVM baseline has since been trained; its evaluation is in [baseline-results.md](baseline-results.md). **Project decision:** the first model predicts actor-intended categories from CREMA-D. The dataset was downloaded to `work/crema_d/` for this inspection and is not part of the application source.
 
 ## 1. Dataset overview
 
