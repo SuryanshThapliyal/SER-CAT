@@ -24,7 +24,7 @@ import numpy as np
 import sklearn
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
 
 
@@ -43,8 +43,10 @@ HOP_LENGTH = 160  # 10 ms at 16 kHz
 N_MFCC = 13
 N_MELS = 40
 FEATURE_CACHE_VERSION = 1
-SVM_C_VALUES = (0.1, 1.0, 10.0)
+SVM_C_VALUES = (1.0, 3.0, 10.0)
 SVM_KERNELS = ("linear", "rbf")
+SVM_GAMMA_VALUES = ("scale", 0.01, 0.03, 0.1)
+SCALERS = ("standard", "robust")
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -281,47 +283,56 @@ def train_and_select_with_validation(
     selected_settings: dict[str, Any] | None = None
     best_score = -1.0
 
-    for kernel in SVM_KERNELS:
-        for c_value in SVM_C_VALUES:
-            model = Pipeline(
-                steps=[
-                    ("scaler", StandardScaler()),
-                    (
-                        "svc",
-                        SVC(
-                            kernel=kernel,
-                            C=c_value,
-                            class_weight="balanced",
-                        ),
-                    ),
-                ]
-            )
-            started = time.perf_counter()
-            model.fit(train_data["X"], train_data["y"])
-            predictions = model.predict(validation_data["X"])
-            metrics = evaluate_predictions(validation_data["y"], predictions)
-            settings = {
-                "kernel": kernel,
-                "C": c_value,
-                "class_weight": "balanced",
-                "feature": f"MFCC{N_MFCC} mean+std",
-            }
-            candidate = {
-                "settings": settings,
-                "validation": metrics,
-                "fit_and_validation_seconds": round(time.perf_counter() - started, 3),
-            }
-            candidates.append(candidate)
-            print(
-                f"validation {kernel=} {c_value=}: "
-                f"macro_f1={metrics['macro_f1']:.4f}"
-            )
-            # Keeping the first candidate on a tie makes the tie-break stable
-            # in the order defined by SVM_KERNELS and SVM_C_VALUES.
-            if metrics["macro_f1"] > best_score:
-                best_score = metrics["macro_f1"]
-                selected_model = model
-                selected_settings = settings
+    for scaler_name in SCALERS:
+        for kernel in SVM_KERNELS:
+            for c_value in SVM_C_VALUES:
+                gammas: tuple[str | float, ...] = (
+                    SVM_GAMMA_VALUES if kernel == "rbf" else ("scale",)
+                )
+                for gamma in gammas:
+                    scaler = StandardScaler() if scaler_name == "standard" else RobustScaler()
+                    model = Pipeline(
+                        steps=[
+                            ("scaler", scaler),
+                            (
+                                "svc",
+                                SVC(
+                                    kernel=kernel,
+                                    C=c_value,
+                                    gamma=gamma,
+                                    class_weight="balanced",
+                                    decision_function_shape="ovr",
+                                ),
+                            ),
+                        ]
+                    )
+                    started = time.perf_counter()
+                    model.fit(train_data["X"], train_data["y"])
+                    predictions = model.predict(validation_data["X"])
+                    metrics = evaluate_predictions(validation_data["y"], predictions)
+                    settings = {
+                        "scaler": scaler_name,
+                        "kernel": kernel,
+                        "C": c_value,
+                        "gamma": gamma,
+                        "class_weight": "balanced",
+                        "feature": f"MFCC{N_MFCC} mean+std",
+                    }
+                    candidate = {
+                        "settings": settings,
+                        "validation": metrics,
+                        "fit_and_validation_seconds": round(time.perf_counter() - started, 3),
+                    }
+                    candidates.append(candidate)
+                    print(
+                        f"validation {scaler_name=} {kernel=} {c_value=} {gamma=}: "
+                        f"macro_f1={metrics['macro_f1']:.4f}"
+                    )
+                    # Keeping the first candidate on a tie makes selection stable.
+                    if metrics["macro_f1"] > best_score:
+                        best_score = metrics["macro_f1"]
+                        selected_model = model
+                        selected_settings = settings
 
     if selected_model is None or selected_settings is None:
         raise RuntimeError("No SVM candidate was trained.")

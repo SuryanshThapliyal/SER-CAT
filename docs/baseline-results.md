@@ -67,3 +67,7 @@ these same test scores.
 
 Generated model, cache, and machine-readable result files are under the ignored
 `work/crema_d/baseline_results/` directory.
+
+The later validation-only SVM comparison is documented in
+[`model-tuning.md`](model-tuning.md). It does not change this historical test
+result; its selected model has not been evaluated on the held-out test actors.
