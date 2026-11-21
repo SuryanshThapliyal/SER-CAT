@@ -34,6 +34,7 @@ MANIFEST_PATH = CREMA_ROOT / "manifest_actor_intended.csv"
 SPLIT_SUMMARY_PATH = CREMA_ROOT / "split_summary_seed_20261108.json"
 RESULTS_DIR = CREMA_ROOT / "baseline_results"
 FEATURE_CACHE_PATH = CREMA_ROOT / "mfcc13_mean_std_v1.npz"
+TUNED_TEST_RESULTS_PATH = RESULTS_DIR / "tuned_test_results.json"
 
 TARGET_LABELS = ("anger", "happiness", "neutral", "sadness")
 SPLIT_NAMES = ("train", "validation", "test")
@@ -365,6 +366,13 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    if args.evaluate_test and TUNED_TEST_RESULTS_PATH.exists():
+        raise SystemExit(
+            f"Refusing to overwrite {TUNED_TEST_RESULTS_PATH}; the tuned model's "
+            "held-out test result has already been recorded. Start a new documented "
+            "experiment and evaluation protocol if needed."
+        )
+
     split_summary = read_json(SPLIT_SUMMARY_PATH)
     split_seed = int(split_summary["split_seed"])
     rows = load_manifest(args.manifest)
@@ -413,7 +421,7 @@ def main() -> None:
         "python_version": platform.python_version(),
         "sklearn_version": sklearn.__version__,
         "model_artifact": str(model_path),
-        "test_evaluated": False,
+        "tuned_model_test_evaluated": False,
     }
     validation_path = RESULTS_DIR / "validation_results.json"
     validation_path.write_text(json.dumps(validation_results, indent=2), encoding="utf-8")
@@ -426,12 +434,7 @@ def main() -> None:
         print("Test actors were not evaluated. Add --evaluate-test after settings are locked.")
         return
 
-    test_results_path = RESULTS_DIR / "test_results.json"
-    if test_results_path.exists():
-        raise SystemExit(
-            f"Refusing to overwrite {test_results_path}; the held-out test result "
-            "has already been recorded. Start a new documented experiment if needed."
-        )
+    test_results_path = TUNED_TEST_RESULTS_PATH
 
     test_started = time.perf_counter()
     test_data = feature_sets["test"]
@@ -449,7 +452,7 @@ def main() -> None:
         "note": "Held-out test result; do not use it to select model settings.",
     }
     test_results_path.write_text(json.dumps(test_results, indent=2), encoding="utf-8")
-    validation_results["test_evaluated"] = True
+    validation_results["tuned_model_test_evaluated"] = True
     validation_path.write_text(json.dumps(validation_results, indent=2), encoding="utf-8")
     print(f"TEST macro-F1={test_metrics['macro_f1']:.4f}")
     print(f"Saved final test results: {test_results_path}")

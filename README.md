@@ -15,6 +15,8 @@ Live streaming, speaker identification/diarization, and automatic personalizatio
 - [CREMA-D Dataset Inspection](docs/crema-d-inspection.md)
 - [MFCC + SVM Baseline Results](docs/baseline-results.md)
 - [Validation tuning experiment](docs/model-tuning.md)
+- [Exploratory audio observations](docs/exploratory-audio-observations.md)
+- [wav2vec 2.0 experiment plan](docs/wav2vec2-experiment.md)
 
 ## Current dataset findings
 
@@ -22,14 +24,22 @@ The first model predicts actor-intended emotion labels from CREMA-D: anger, happ
 
 ## Local setup
 
-The first backend API slice is in `backend/`; frontend application code has not been added yet. ML environment setup is documented in `ml/README.md`. To install and run the API from the project root:
+The backend API is in `backend/` and the React frontend is in `frontend/`. ML environment setup is documented in `ml/README.md`. Start the API from the project root:
 
 ```powershell
 uv pip install --python .venv\Scripts\python.exe -r backend\requirements.txt
 uvicorn backend.app.main:app --reload
 ```
 
-The API expects the locally trained model under `work/crema_d/baseline_results/`. Set `SER_MODEL_PATH` to override it. `GET /api/v1/health` reports service/model state and `POST /api/v1/analyze` accepts a multipart field named `file`. WAV and FLAC decode through SoundFile; MP3 decoding depends on the available Librosa decoder backend. The API currently returns relative model scores, not calibrated probabilities. When local configuration is needed, copy `.env.example` to `.env`; keep credentials and machine-specific settings in `.env`. The `.env` file is ignored by Git.
+In another terminal, start the frontend:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite. Its development proxy forwards `/api` requests to `http://127.0.0.1:8000`. The API expects the locally trained model under `work/crema_d/baseline_results/`; set `SER_MODEL_PATH` to override it. `GET /api/v1/health` reports service/model state and `POST /api/v1/analyze` accepts a multipart field named `file`. WAV and FLAC decode through SoundFile; MP3 decoding depends on the available decoder backend. The API returns relative model scores, not calibrated probabilities. The frontend uses system fonts and does not load external assets. When local configuration is needed, copy `.env.example` to `.env`; keep credentials and machine-specific settings in `.env`. The `.env` file is ignored by Git.
 
 ## Data and generated files
 
