@@ -1,0 +1,99 @@
+{
+  "experiment": "ravdess_mfcc_svm_test",
+  "selected_settings": {
+    "scaler": "robust",
+    "kernel": "rbf",
+    "C": 3.0,
+    "gamma": 0.01,
+    "class_weight": "balanced",
+    "feature": "MFCC13 mean+std"
+  },
+  "test_actor_ids": [
+    "16",
+    "17",
+    "19",
+    "24"
+  ],
+  "test_sample_count": 112,
+  "metrics": {
+    "macro_f1": 0.4931727211703842,
+    "per_class": {
+      "anger": {
+        "precision": 0.6585365853658537,
+        "recall": 0.84375,
+        "f1-score": 0.7397260273972602,
+        "support": 32.0
+      },
+      "happiness": {
+        "precision": 0.43478260869565216,
+        "recall": 0.3125,
+        "f1-score": 0.36363636363636365,
+        "support": 32.0
+      },
+      "neutral": {
+        "precision": 0.36363636363636365,
+        "recall": 0.5,
+        "f1-score": 0.42105263157894735,
+        "support": 16.0
+      },
+      "sadness": {
+        "precision": 0.5,
+        "recall": 0.40625,
+        "f1-score": 0.4482758620689655,
+        "support": 32.0
+      },
+      "accuracy": 0.5178571428571429,
+      "macro avg": {
+        "precision": 0.48923888942446736,
+        "recall": 0.515625,
+        "f1-score": 0.4931727211703842,
+        "support": 112.0
+      },
+      "weighted avg": {
+        "precision": 0.5071821073941966,
+        "recall": 0.5178571428571429,
+        "f1-score": 0.503475591112018,
+        "support": 112.0
+      }
+    },
+    "confusion_matrix_labels": [
+      "anger",
+      "happiness",
+      "neutral",
+      "sadness"
+    ],
+    "confusion_matrix": [
+      [
+        27,
+        2,
+        3,
+        0
+      ],
+      [
+        13,
+        10,
+        4,
+        5
+      ],
+      [
+        0,
+        0,
+        8,
+        8
+      ],
+      [
+        1,
+        11,
+        7,
+        13
+      ]
+    ],
+    "accuracy": 0.5178571428571429,
+    "sample_count": 112
+  },
+  "test_evaluated": true,
+  "training_or_model_selection_used_test": false,
+  "evaluation_seconds": 1.51,
+  "git_commit": "c3295ec0b1c412c2d6e87d71002e6b6bc9140a21",
+  "note": "One-time held-out test on 4 unseen RAVDESS actors; settings were fixed by validation."
+}

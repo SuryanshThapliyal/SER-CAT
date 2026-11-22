@@ -1,5 +1,10 @@
 # GPU handoff: train and compare both models on RAVDESS
 
+**Status:** Completed. The SVM and pretrained-base wav2vec RAVDESS comparison
+has been run and its results are in `ravdess_comparison.md`.
+For the next step, continue the CREMA-D-trained checkpoint on RAVDESS using
+[`wav2vec2-crema-to-ravdess-transfer-handoff.md`](wav2vec2-crema-to-ravdess-transfer-handoff.md).
+
 ## Goal
 
 Train a four-emotion wav2vec 2.0 model and an MFCC + SVM model using the same

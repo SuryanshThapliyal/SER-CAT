@@ -1,0 +1,4 @@
+.venv\Scripts\python.exe ml\build_ravdess_manifest.py   (exit 0, log ravdess_manifest_20261122_155528.txt)
+.venv\Scripts\python.exe ml\train_ravdess_svm.py   (exit 0, log ravdess_svm_train_20261122_155528.txt)
+.venv\Scripts\python.exe ml\train_ravdess_wav2vec2.py --batch-size 4 --run-name wav2vec2_base_ravdess_seed_20261122   (exit 0, log ravdess_wav2vec2_train_wav2vec2_base_ravdess_seed_20261122_20261122_155528.txt)
+.venv\Scripts\python.exe ml\evaluate_ravdess_test.py --run-name wav2vec2_base_ravdess_seed_20261122   (exit 0, log ravdess_test_eval_20261122_155528.txt)

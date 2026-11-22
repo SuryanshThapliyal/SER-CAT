@@ -1,0 +1,126 @@
+{
+  "dataset": "RAVDESS audio-only speech",
+  "archive": "Audio_Speech_Actors_01-24.zip",
+  "archive_sha256": "5d208e01632cc3e5242106fa2af3273e6dc5239fb8143131979ac74c4aa40657",
+  "source": "https://zenodo.org/records/1188976",
+  "license": "CC BY-NC-SA 4.0",
+  "attribution": "Livingstone SR, Russo FA (2018) The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS). PLoS ONE 13(5): e0196391. https://doi.org/10.1371/journal.pone.0196391. Zenodo record 1188976.",
+  "target_labels": [
+    "anger",
+    "happiness",
+    "neutral",
+    "sadness"
+  ],
+  "emotion_code_to_label": {
+    "01": "neutral",
+    "03": "happiness",
+    "04": "sadness",
+    "05": "anger"
+  },
+  "excluded_emotion_codes": {
+    "02": "calm",
+    "06": "fearful",
+    "07": "disgust",
+    "08": "surprised"
+  },
+  "split_seed": 20261122,
+  "split_method": "Fixed actor allocation from docs/ravdess-two-model-gpu-handoff.md, generated with seed 20261122 and stratified by odd (male) / even (female) actor IDs; every actor is in exactly one split. Allocation was fixed before any model was trained.",
+  "speech_files_total": 1440,
+  "included_total": 672,
+  "included_label_counts": {
+    "anger": 192,
+    "happiness": 192,
+    "neutral": 96,
+    "sadness": 192
+  },
+  "excluded_total": 768,
+  "included_audio": {
+    "sample_rates_hz": {
+      "48000": 672
+    },
+    "channels": {
+      "1": 671,
+      "2": 1
+    },
+    "duration_seconds_min": 3.07,
+    "duration_seconds_mean": 3.702,
+    "duration_seconds_max": 5.105,
+    "all_finite_and_non_silent": true
+  },
+  "split_summary": {
+    "train": {
+      "actor_ids": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "09",
+        "10",
+        "11",
+        "14",
+        "15",
+        "18",
+        "20",
+        "21",
+        "22",
+        "23"
+      ],
+      "actors": 16,
+      "male_actors": 8,
+      "female_actors": 8,
+      "all_speech_files": 960,
+      "included_four_class_files": 448,
+      "included_label_counts": {
+        "anger": 128,
+        "happiness": 128,
+        "neutral": 64,
+        "sadness": 128
+      }
+    },
+    "validation": {
+      "actor_ids": [
+        "07",
+        "08",
+        "12",
+        "13"
+      ],
+      "actors": 4,
+      "male_actors": 2,
+      "female_actors": 2,
+      "all_speech_files": 240,
+      "included_four_class_files": 112,
+      "included_label_counts": {
+        "anger": 32,
+        "happiness": 32,
+        "neutral": 16,
+        "sadness": 32
+      }
+    },
+    "test": {
+      "actor_ids": [
+        "16",
+        "17",
+        "19",
+        "24"
+      ],
+      "actors": 4,
+      "male_actors": 2,
+      "female_actors": 2,
+      "all_speech_files": 240,
+      "included_four_class_files": 112,
+      "included_label_counts": {
+        "anger": 32,
+        "happiness": 32,
+        "neutral": 16,
+        "sadness": 32
+      }
+    }
+  },
+  "manual_64_clip_sample_pack_used": false,
+  "crema_d_files_used": false,
+  "files": {
+    "manifest": "manifest_ravdess_speech_4class.csv"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "experiment": "ravdess_wav2vec2_base_test",
+  "checkpoint": "D:\\SER-CAT\\work\\ravdess\\wav2vec2_experiments\\wav2vec2_base_ravdess_seed_20261122\\best_model.pt",
+  "selected_epoch": 10,
+  "test_actor_ids": [
+    "16",
+    "17",
+    "19",
+    "24"
+  ],
+  "test_sample_count": 112,
+  "metrics": {
+    "macro_f1": 0.6327019609397668,
+    "accuracy": 0.6428571428571429,
+    "per_class": {
+      "anger": {
+        "precision": 0.6829268292682927,
+        "recall": 0.875,
+        "f1-score": 0.7671232876712328,
+        "support": 32.0
+      },
+      "happiness": {
+        "precision": 0.631578947368421,
+        "recall": 0.375,
+        "f1-score": 0.47058823529411764,
+        "support": 32.0
+      },
+      "neutral": {
+        "precision": 0.56,
+        "recall": 0.875,
+        "f1-score": 0.6829268292682927,
+        "support": 16.0
+      },
+      "sadness": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5625,
+        "f1-score": 0.6101694915254238,
+        "support": 32.0
+      },
+      "accuracy": 0.6428571428571429,
+      "macro avg": {
+        "precision": 0.635293110825845,
+        "recall": 0.671875,
+        "f1-score": 0.6327019609397668,
+        "support": 112.0
+      },
+      "weighted avg": {
+        "precision": 0.6460492695152515,
+        "recall": 0.6428571428571429,
+        "f1-score": 0.6255269797499773,
+        "support": 112.0
+      }
+    },
+    "confusion_matrix_labels": [
+      "anger",
+      "happiness",
+      "neutral",
+      "sadness"
+    ],
+    "confusion_matrix": [
+      [
+        28,
+        1,
+        1,
+        2
+      ],
+      [
+        11,
+        12,
+        3,
+        6
+      ],
+      [
+        1,
+        0,
+        14,
+        1
+      ],
+      [
+        1,
+        6,
+        7,
+        18
+      ]
+    ],
+    "sample_count": 112
+  },
+  "test_evaluated": true,
+  "training_or_model_selection_used_test": false,
+  "hardware": {
+    "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "vram_gb": 8.0
+  },
+  "python_version": "3.14.3",
+  "torch_version": "2.11.0+cu128",
+  "transformers_version": "4.48.3",
+  "evaluation_seconds": 4.54,
+  "git_commit": "c3295ec0b1c412c2d6e87d71002e6b6bc9140a21",
+  "note": "One-time held-out test on 4 unseen RAVDESS actors; epoch was fixed by validation."
+}
