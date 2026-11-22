@@ -3,6 +3,10 @@ import { useRef, useState } from "react";
 const MAX_BYTES = 25 * 1024 * 1024;
 const ACCEPTED_EXTENSIONS = [".wav", ".flac", ".mp3"];
 const LABELS = ["anger", "happiness", "neutral", "sadness"];
+const MODELS = [
+  { id: "svm", name: "MFCC + SVM", detail: "Compact acoustic-feature baseline" },
+  { id: "wav2vec2", name: "wav2vec 2.0", detail: "Pretrained speech encoder · slower on CPU" },
+];
 const LABEL_COLORS = {
   anger: "#d86a55",
   happiness: "#d4a642",
@@ -33,6 +37,7 @@ function errorMessage(response, body) {
 function App() {
   const inputRef = useRef(null);
   const [file, setFile] = useState(null);
+  const [model, setModel] = useState("svm");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -70,6 +75,7 @@ function App() {
     try {
       const form = new FormData();
       form.append("file", file);
+      form.append("model", model);
       const response = await fetch("/api/v1/analyze", { method: "POST", body: form });
       const body = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(errorMessage(response, body));
@@ -125,8 +131,8 @@ function App() {
               <svg viewBox="0 0 24 24"><path d="M4 14v-4m4 8V6m4 12V4m4 14V8m4 6v-4" /></svg>
             </div>
             <div>
-              <p className="method-title">A small, focused experiment</p>
-              <p className="method-copy">MFCC features and an SVM compare acoustic patterns with actor-intended labels from CREMA-D.</p>
+              <p className="method-title">Compare two speech models</p>
+              <p className="method-copy">Choose a compact MFCC + SVM baseline or a fine-tuned wav2vec 2.0 speech encoder.</p>
             </div>
           </div>
 
@@ -143,6 +149,30 @@ function App() {
           </div>
 
           <form onSubmit={analyze}>
+            <fieldset className="model-selection" disabled={busy}>
+              <legend>Choose a model</legend>
+              <div className="model-options">
+                {MODELS.map((option) => (
+                  <label className={`model-option${model === option.id ? " is-selected" : ""}`} key={option.id}>
+                    <input
+                      type="radio"
+                      name="model"
+                      value={option.id}
+                      checked={model === option.id}
+                      onChange={() => {
+                        setModel(option.id);
+                        setResult(null);
+                        setError("");
+                      }}
+                    />
+                    <span className="model-option-copy">
+                      <span className="model-option-name">{option.name}</span>
+                      <span className="model-option-detail">{option.detail}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
             <input
               ref={inputRef}
               className="visually-hidden"
@@ -189,10 +219,10 @@ function App() {
             <button className="analyze-button" type="submit" disabled={!file || busy}>
               {busy ? <><span className="spinner" /> Analyzing recording…</> : <>Analyze recording <span aria-hidden="true">↗</span></>}
             </button>
-            <p className="button-caption">Usually takes a few seconds</p>
+            <p className="button-caption">wav2vec 2.0 may take longer, especially on CPU</p>
           </form>
 
-          {busy && <div className="loading-note" role="status" aria-live="polite"><span className="loading-pulse" /> Extracting vocal features and comparing patterns</div>}
+          {busy && <div className="loading-note" role="status" aria-live="polite"><span className="loading-pulse" /> Analyzing with {MODELS.find((option) => option.id === model)?.name}</div>}
 
           {result && (
             <section className="result-card" aria-labelledby="result-title" aria-live="polite">
@@ -201,7 +231,10 @@ function App() {
                   <p className="panel-kicker">ANALYSIS COMPLETE</p>
                   <h3 id="result-title">Estimated emotion</h3>
                 </div>
-                <span className="result-check" aria-hidden="true">✓</span>
+                <div className="result-heading-side">
+                  <span className="model-result-tag">{result.model_name}</span>
+                  <span className="result-check" aria-hidden="true">✓</span>
+                </div>
               </div>
               <div className="prediction-line">
                 <span className="prediction-dot" style={{ "--label-color": LABEL_COLORS[prediction] || "#7886c7" }} />

@@ -1,0 +1,6 @@
+Inference device: NVIDIA GeForce RTX 4060 Laptop GPU
+Scoring 755 test clips from 14 actors
+D:\SER-CAT\ml\train_wav2vec2.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+Test macro-F1=0.8019
+Saved test report: D:\SER-CAT\work\crema_d\wav2vec2_experiments\wav2vec2_base_seed_20261108\test_results.json

@@ -28,19 +28,30 @@ The first model predicts actor-intended emotion labels from CREMA-D: anger, happ
 The backend API is in `backend/` and the React frontend is in `frontend/`. ML environment setup is documented in `ml/README.md`. Start the API from the project root:
 
 ```powershell
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 uv pip install --python .venv\Scripts\python.exe -r backend\requirements.txt
-uvicorn backend.app.main:app --reload
+uv pip install --python .venv\Scripts\python.exe torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+.\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --env-file .env --reload
 ```
+
+The API offers both **MFCC + SVM** and **wav2vec 2.0** in the website model
+selector. PyTorch is installed separately as a CPU build for this GPU-free
+localhost setup using the [official PyTorch 2.11.0 install instructions](https://pytorch.org/get-started/previous-versions/);
+wav2vec inference may be slower on CPU. Its checkpoint and the SVM artifact
+stay under ignored `work/crema_d/` paths. The wav2vec model loads the first
+time that option is selected; the first load may fetch the pinned model
+configuration from Hugging Face, while learned weights come from the local
+checkpoint.
 
 In another terminal, start the frontend:
 
 ```powershell
 cd frontend
-npm install
-npm run dev
+npm.cmd install
+npm.cmd run dev
 ```
 
-Open the local URL printed by Vite. Its development proxy forwards `/api` requests to `http://127.0.0.1:8000`. The API expects the locally trained model under `work/crema_d/baseline_results/`; set `SER_MODEL_PATH` to override it. `GET /api/v1/health` reports service/model state and `POST /api/v1/analyze` accepts a multipart field named `file`. WAV and FLAC decode through SoundFile; MP3 decoding depends on the available decoder backend. The API returns relative model scores, not calibrated probabilities. The frontend uses system fonts and does not load external assets. When local configuration is needed, copy `.env.example` to `.env`; keep credentials and machine-specific settings in `.env`. The `.env` file is ignored by Git.
+Open the local URL printed by Vite. Its development proxy forwards `/api` requests to `http://127.0.0.1:8000`. The API loads the SVM artifact from `work/crema_d/baseline_results/` and the wav2vec checkpoint from `work/crema_d/wav2vec2_experiments/wav2vec2_base_seed_20261108/`; copy `.env.example` to `.env` to configure either path. The website lets you choose which model analyzes each upload. Wav2vec loads on its first request and defaults to CPU through `SER_WAV2VEC_DEVICE=cpu`. `GET /api/v1/health` reports both model states and `POST /api/v1/analyze` accepts multipart fields `file` and `model`. WAV and FLAC decode through SoundFile; MP3 decoding depends on the available decoder backend. The API returns relative model scores, not calibrated probabilities. The frontend uses system fonts and does not load external assets. Keep credentials and machine-specific settings in `.env`; `.env` is ignored by Git.
 
 ## Data and generated files
 

@@ -68,6 +68,25 @@ available, otherwise CPU. Follow
 files and command. This is an exploratory result because the same test actors
 were previously used for SVM evaluation; do not tune from this score.
 
+To check the four shared emotions on a separately collected TESS folder, run
+`ml/evaluate_tess_wav2vec2.py`. This is also inference only; it reports macro
+F1, accuracy, per-class results, and a confusion matrix. TESS has only two
+speakers, so even a full-corpus result is an exploratory cross-corpus
+diagnostic, not a speaker-diverse benchmark. See
+[`docs/wav2vec2-external-evaluation.md`](../docs/wav2vec2-external-evaluation.md)
+for the interpretation and next training protocol.
+
+For manual website uploads across more speakers, the official RAVDESS speech
+archive can be reduced to a balanced 64-clip sample with
+`ml/prepare_ravdess_manual_samples.py`. The prepared archive is under the
+ignored `work/crema_d/external_test_samples/` directory. It has eight actors,
+both sexes, two sentences, and 16 clips per shared emotion. It is a manual
+diagnostic, not a benchmark; retain the attribution and license in its README.
+For the next training work, follow
+[`docs/ravdess-two-model-gpu-handoff.md`](../docs/ravdess-two-model-gpu-handoff.md).
+It defines a fixed speaker-disjoint split and requires both models to use the
+same RAVDESS clips for a fair comparison.
+
 The fixed split keeps each actor in only one partition. The manifest marks the
 all-zero recording as excluded and includes a reviewed correction for the
 malformed intensity suffix. Do not use the test scores to change features or
