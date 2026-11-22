@@ -61,6 +61,13 @@ It never reads the held-out test actors. See
 and GPU-machine instructions. `ml/train_wav2vec2.py` deliberately exits when
 CUDA is unavailable; do not run it on a CPU-only machine.
 
+To score the saved wav2vec checkpoint on the original test split, run
+`ml/evaluate_wav2vec2_test.py`. It performs inference only and uses CUDA when
+available, otherwise CPU. Follow
+[`docs/wav2vec2-test-handoff.md`](../docs/wav2vec2-test-handoff.md) for the
+files and command. This is an exploratory result because the same test actors
+were previously used for SVM evaluation; do not tune from this score.
+
 The fixed split keeps each actor in only one partition. The manifest marks the
 all-zero recording as excluded and includes a reviewed correction for the
 malformed intensity suffix. Do not use the test scores to change features or

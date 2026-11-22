@@ -1,0 +1,51 @@
+CUDA device: NVIDIA GeForce RTX 4060 Laptop GPU (8.0 GB VRAM)
+Warning: under 8 GB VRAM; reduce --batch-size to 2 or 1 if memory runs out.
+Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:322: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler(enabled=amp)
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=1/10 loss=1.2178 validation_macro_f1=0.5832
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=2/10 loss=0.8618 validation_macro_f1=0.7306
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=3/10 loss=0.6916 validation_macro_f1=0.7417
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=4/10 loss=0.5922 validation_macro_f1=0.6850
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=5/10 loss=0.5464 validation_macro_f1=0.7946
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=6/10 loss=0.4838 validation_macro_f1=0.7454
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=7/10 loss=0.4465 validation_macro_f1=0.7627
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:344: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+D:\SER-CAT\ml\train_wav2vec2_fixed.py:181: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=amp):
+epoch=8/10 loss=0.4243 validation_macro_f1=0.7817
+Early stopping after 3 epochs without validation improvement.
+Best validation macro-F1=0.7946
+Saved best checkpoint: D:\SER-CAT\work\crema_d\wav2vec2_experiments\wav2vec2_base_seed_20261108\best_model.pt
+Saved validation history: D:\SER-CAT\work\crema_d\wav2vec2_experiments\wav2vec2_base_seed_20261108\validation_results.json
+No test actors were loaded. Do not use the held-out test set to tune this model.

@@ -1,0 +1,23 @@
+--- ml/train_wav2vec2.py
++++ ml/train_wav2vec2_fixed.py
+@@ -258,9 +258,17 @@
+     if len(validation_rows) != expected_val:
+         raise ValueError("Validation row count differs from the reviewed split summary.")
+ 
+-    feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
+-        MODEL_ID,
+-        revision=MODEL_REVISION,
++    # FIX: the pinned revision has no preprocessor_config.json (it was added in a
++    # later commit), so from_pretrained() fails. Build the extractor with the
++    # same settings as the upstream facebook/wav2vec2-base preprocessor_config.json.
++    # Model weights/config remain pinned to MODEL_REVISION.
++    feature_extractor = Wav2Vec2FeatureExtractor(
++        feature_size=1,
++        sampling_rate=SAMPLE_RATE,
++        padding_value=0.0,
++        padding_side="right",
++        do_normalize=True,
++        return_attention_mask=False,
+     )
+     train_dataset = CremaEmotionDataset(train_rows, feature_extractor)
+     validation_dataset = CremaEmotionDataset(validation_rows, feature_extractor)

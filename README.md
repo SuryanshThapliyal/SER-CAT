@@ -17,6 +17,7 @@ Live streaming, speaker identification/diarization, and automatic personalizatio
 - [Validation tuning experiment](docs/model-tuning.md)
 - [Exploratory audio observations](docs/exploratory-audio-observations.md)
 - [wav2vec 2.0 experiment plan](docs/wav2vec2-experiment.md)
+- [wav2vec 2.0 test-only handoff](docs/wav2vec2-test-handoff.md)
 
 ## Current dataset findings
 

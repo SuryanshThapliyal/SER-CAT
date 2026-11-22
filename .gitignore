@@ -10,6 +10,7 @@
 /artifacts/
 
 # Model weights and checkpoints
+/best_model/
 *.pt
 *.pth
 *.ckpt
