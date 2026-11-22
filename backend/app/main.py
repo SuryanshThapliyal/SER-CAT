@@ -35,9 +35,19 @@ WAV2VEC2_MODEL_PATH = Path(os.getenv(
     / "work" / "crema_d" / "wav2vec2_experiments"
     / "wav2vec2_base_seed_20261108" / "best_model.pt",
 ))
+WAV2VEC2_TRANSFER_MODEL_PATH = Path(os.getenv(
+    "SER_WAV2VEC2_TRANSFER_MODEL_PATH",
+    PROJECT_ROOT
+    / "work" / "ravdess" / "wav2vec2_experiments"
+    / "cremad_init_ravdess_seed_20261122" / "best_model.pt",
+))
 WAV2VEC2_DEVICE = os.getenv("SER_WAV2VEC_DEVICE", "cpu").strip().lower()
 
-MODEL_DISPLAY_NAMES = {"svm": "MFCC + SVM", "wav2vec2": "wav2vec 2.0"}
+MODEL_DISPLAY_NAMES = {
+    "svm": "MFCC + SVM",
+    "wav2vec2": "wav2vec 2.0 (CREMA-D)",
+    "wav2vec2_transfer": "wav2vec 2.0 (CREMA-D + RAVDESS)",
+}
 MODEL_NAMES = frozenset(MODEL_DISPLAY_NAMES)
 
 app = FastAPI(title="SER-CAT API", version="0.2.0")
@@ -58,8 +68,12 @@ def get_predictor(name: str) -> EmotionPredictor:
             return cached
         if name == "svm":
             loaded: EmotionPredictor = MfccSvmPredictor(SVM_MODEL_PATH)
-        else:
+        elif name == "wav2vec2":
             loaded = Wav2Vec2Predictor(WAV2VEC2_MODEL_PATH, device=WAV2VEC2_DEVICE)
+        else:
+            loaded = Wav2Vec2Predictor(
+                WAV2VEC2_TRANSFER_MODEL_PATH, device=WAV2VEC2_DEVICE
+            )
         predictors[name] = loaded
         return loaded
 
@@ -79,6 +93,7 @@ def load_default_model() -> None:
 def health() -> dict[str, object]:
     svm_ready = "svm" in predictors
     wav2vec_loaded = "wav2vec2" in predictors
+    transfer_loaded = "wav2vec2_transfer" in predictors
     wav2vec_available = WAV2VEC2_MODEL_PATH.is_file()
     return {
         "status": "ok",
@@ -88,6 +103,11 @@ def health() -> dict[str, object]:
             "wav2vec2": (
                 "ready" if wav2vec_loaded
                 else "available" if wav2vec_available
+                else "unavailable"
+            ),
+            "wav2vec2_transfer": (
+                "ready" if transfer_loaded
+                else "available" if WAV2VEC2_TRANSFER_MODEL_PATH.is_file()
                 else "unavailable"
             ),
         },
@@ -100,7 +120,7 @@ async def analyze(
     model: str = Form(default="svm"),
 ) -> dict[str, object]:
     if model not in MODEL_NAMES:
-        raise HTTPException(422, "Choose either the svm or wav2vec2 model.")
+        raise HTTPException(422, "Choose svm, wav2vec2, or wav2vec2_transfer.")
     suffix = Path(file.filename or "").suffix.lower()
     if suffix not in ALLOWED_SUFFIXES:
         raise HTTPException(415, "Upload a WAV, FLAC, or MP3 audio file.")
@@ -108,9 +128,10 @@ async def analyze(
         predictor = await run_in_threadpool(get_predictor, model)
     except (FileNotFoundError, ImportError, RuntimeError, ValueError, OSError) as exc:
         logger.exception("Could not load requested emotion model: %s", model)
-        if model == "wav2vec2":
+        if model in {"wav2vec2", "wav2vec2_transfer"}:
+            model_label = MODEL_DISPLAY_NAMES[model]
             message = (
-                "The wav2vec 2.0 model is unavailable. Check its checkpoint path, "
+                f"The {model_label} model is unavailable. Check its checkpoint path, "
                 "install PyTorch and the wav2vec dependencies, and confirm the "
                 "configured inference device is available."
             )

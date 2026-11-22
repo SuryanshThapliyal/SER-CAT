@@ -1,0 +1,400 @@
+{
+  "git_commit": "ee1a38ae0f9cc46cc5a0dd6c85ec8930d319367e",
+  "generated_utc": "2026-11-22T16:39:48+00:00",
+  "split_seed": 20261122,
+  "transfer_selected_epoch": 12,
+  "base_selected_epoch": 10,
+  "svm_selected_settings": {
+    "scaler": "robust",
+    "kernel": "rbf",
+    "C": 3.0,
+    "gamma": 0.01,
+    "class_weight": "balanced",
+    "feature": "MFCC13 mean+std"
+  },
+  "init_checkpoint_sha256": "e7efd80277e616d9c8efc70ea581bffc824bbfb42d1156319c5bd7f94f0c4f8d",
+  "validation": {
+    "MFCC + SVM": {
+      "macro_f1": 0.641280395378756,
+      "accuracy": 0.6607142857142857,
+      "per_class": {
+        "anger": {
+          "precision": 0.9310344827586207,
+          "recall": 0.84375,
+          "f1-score": 0.8852459016393442,
+          "support": 32.0
+        },
+        "happiness": {
+          "precision": 0.6764705882352942,
+          "recall": 0.71875,
+          "f1-score": 0.696969696969697,
+          "support": 32.0
+        },
+        "neutral": {
+          "precision": 0.3448275862068966,
+          "recall": 0.625,
+          "f1-score": 0.4444444444444444,
+          "support": 16.0
+        },
+        "sadness": {
+          "precision": 0.7,
+          "recall": 0.4375,
+          "f1-score": 0.5384615384615384,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix_labels": [
+        "anger",
+        "happiness",
+        "neutral",
+        "sadness"
+      ],
+      "confusion_matrix": [
+        [
+          27,
+          1,
+          4,
+          0
+        ],
+        [
+          2,
+          23,
+          6,
+          1
+        ],
+        [
+          0,
+          1,
+          10,
+          5
+        ],
+        [
+          0,
+          9,
+          9,
+          14
+        ]
+      ]
+    },
+    "wav2vec2 from base (previous)": {
+      "macro_f1": 0.6863776525198939,
+      "accuracy": 0.6964285714285714,
+      "per_class": {
+        "anger": {
+          "precision": 0.9375,
+          "recall": 0.9375,
+          "f1-score": 0.9375,
+          "support": 32.0
+        },
+        "happiness": {
+          "precision": 0.95,
+          "recall": 0.59375,
+          "f1-score": 0.7307692307692307,
+          "support": 32.0
+        },
+        "neutral": {
+          "precision": 0.35714285714285715,
+          "recall": 0.9375,
+          "f1-score": 0.5172413793103449,
+          "support": 16.0
+        },
+        "sadness": {
+          "precision": 0.7777777777777778,
+          "recall": 0.4375,
+          "f1-score": 0.56,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix_labels": [
+        "anger",
+        "happiness",
+        "neutral",
+        "sadness"
+      ],
+      "confusion_matrix": [
+        [
+          30,
+          1,
+          0,
+          1
+        ],
+        [
+          2,
+          19,
+          9,
+          2
+        ],
+        [
+          0,
+          0,
+          15,
+          1
+        ],
+        [
+          0,
+          0,
+          18,
+          14
+        ]
+      ]
+    },
+    "wav2vec2 from CREMA-D (transfer)": {
+      "macro_f1": 0.7205882352941175,
+      "accuracy": 0.7321428571428571,
+      "per_class": {
+        "anger": {
+          "precision": 0.8333333333333334,
+          "recall": 0.9375,
+          "f1-score": 0.8823529411764706,
+          "support": 32.0
+        },
+        "happiness": {
+          "precision": 0.76,
+          "recall": 0.59375,
+          "f1-score": 0.6666666666666666,
+          "support": 32.0
+        },
+        "neutral": {
+          "precision": 0.5172413793103449,
+          "recall": 0.9375,
+          "f1-score": 0.6666666666666666,
+          "support": 16.0
+        },
+        "sadness": {
+          "precision": 0.8181818181818182,
+          "recall": 0.5625,
+          "f1-score": 0.6666666666666666,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix_labels": [
+        "anger",
+        "happiness",
+        "neutral",
+        "sadness"
+      ],
+      "confusion_matrix": [
+        [
+          30,
+          2,
+          0,
+          0
+        ],
+        [
+          6,
+          19,
+          4,
+          3
+        ],
+        [
+          0,
+          0,
+          15,
+          1
+        ],
+        [
+          0,
+          4,
+          10,
+          18
+        ]
+      ]
+    }
+  },
+  "test_repeat_exploratory": {
+    "MFCC + SVM": {
+      "macro_f1": 0.4931727211703842,
+      "accuracy": 0.5178571428571429,
+      "per_class": {
+        "anger": {
+          "precision": 0.6585365853658537,
+          "recall": 0.84375,
+          "f1-score": 0.7397260273972602,
+          "support": 32.0
+        },
+        "happiness": {
+          "precision": 0.43478260869565216,
+          "recall": 0.3125,
+          "f1-score": 0.36363636363636365,
+          "support": 32.0
+        },
+        "neutral": {
+          "precision": 0.36363636363636365,
+          "recall": 0.5,
+          "f1-score": 0.42105263157894735,
+          "support": 16.0
+        },
+        "sadness": {
+          "precision": 0.5,
+          "recall": 0.40625,
+          "f1-score": 0.4482758620689655,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix_labels": [
+        "anger",
+        "happiness",
+        "neutral",
+        "sadness"
+      ],
+      "confusion_matrix": [
+        [
+          27,
+          2,
+          3,
+          0
+        ],
+        [
+          13,
+          10,
+          4,
+          5
+        ],
+        [
+          0,
+          0,
+          8,
+          8
+        ],
+        [
+          1,
+          11,
+          7,
+          13
+        ]
+      ]
+    },
+    "wav2vec2 from base (previous)": {
+      "macro_f1": 0.6327019609397668,
+      "accuracy": 0.6428571428571429,
+      "per_class": {
+        "anger": {
+          "precision": 0.6829268292682927,
+          "recall": 0.875,
+          "f1-score": 0.7671232876712328,
+          "support": 32.0
+        },
+        "happiness": {
+          "precision": 0.631578947368421,
+          "recall": 0.375,
+          "f1-score": 0.47058823529411764,
+          "support": 32.0
+        },
+        "neutral": {
+          "precision": 0.56,
+          "recall": 0.875,
+          "f1-score": 0.6829268292682927,
+          "support": 16.0
+        },
+        "sadness": {
+          "precision": 0.6666666666666666,
+          "recall": 0.5625,
+          "f1-score": 0.6101694915254238,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix_labels": [
+        "anger",
+        "happiness",
+        "neutral",
+        "sadness"
+      ],
+      "confusion_matrix": [
+        [
+          28,
+          1,
+          1,
+          2
+        ],
+        [
+          11,
+          12,
+          3,
+          6
+        ],
+        [
+          1,
+          0,
+          14,
+          1
+        ],
+        [
+          1,
+          6,
+          7,
+          18
+        ]
+      ]
+    },
+    "wav2vec2 from CREMA-D (transfer)": {
+      "macro_f1": 0.6935926488397637,
+      "accuracy": 0.7053571428571429,
+      "per_class": {
+        "anger": {
+          "precision": 0.7105263157894737,
+          "recall": 0.84375,
+          "f1-score": 0.7714285714285715,
+          "support": 32.0
+        },
+        "happiness": {
+          "precision": 0.8666666666666667,
+          "recall": 0.40625,
+          "f1-score": 0.5531914893617021,
+          "support": 32.0
+        },
+        "neutral": {
+          "precision": 0.5333333333333333,
+          "recall": 1.0,
+          "f1-score": 0.6956521739130435,
+          "support": 16.0
+        },
+        "sadness": {
+          "precision": 0.7931034482758621,
+          "recall": 0.71875,
+          "f1-score": 0.7540983606557377,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix_labels": [
+        "anger",
+        "happiness",
+        "neutral",
+        "sadness"
+      ],
+      "confusion_matrix": [
+        [
+          27,
+          1,
+          3,
+          1
+        ],
+        [
+          11,
+          13,
+          3,
+          5
+        ],
+        [
+          0,
+          0,
+          16,
+          0
+        ],
+        [
+          0,
+          1,
+          8,
+          23
+        ]
+      ]
+    }
+  },
+  "crema_d_validation_retention": {
+    "evaluated": true,
+    "clips": 702,
+    "before": 0.7946130464657364,
+    "after": 0.7243519954236819,
+    "macro_f1_change": -0.07026105104205449
+  },
+  "caveat": "Repeat exploratory comparison: RAVDESS test actors 16, 17, 19 and 24 (112 clips) were already examined in the previous RAVDESS comparison, so this is not a fresh blind benchmark. All settings and the epoch were fixed on RAVDESS validation before this single test evaluation. Scores are not comparable with CREMA-D test scores."
+}

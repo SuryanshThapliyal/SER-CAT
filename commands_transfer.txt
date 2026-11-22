@@ -1,0 +1,2 @@
+.venv\Scripts\python.exe ml\finetune_cremad_wav2vec2_on_ravdess.py --batch-size 4 --run-name cremad_init_ravdess_seed_20261122   (exit 0, log transfer_train_cremad_init_ravdess_seed_20261122_20261122_220434.txt)
+.venv\Scripts\python.exe ml\evaluate_cremad_init_ravdess_test.py --run-name cremad_init_ravdess_seed_20261122   (exit 0, log transfer_test_cremad_init_ravdess_seed_20261122_20261122_220434.txt)

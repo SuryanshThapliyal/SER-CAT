@@ -5,7 +5,8 @@ const ACCEPTED_EXTENSIONS = [".wav", ".flac", ".mp3"];
 const LABELS = ["anger", "happiness", "neutral", "sadness"];
 const MODELS = [
   { id: "svm", name: "MFCC + SVM", detail: "Compact acoustic-feature baseline" },
-  { id: "wav2vec2", name: "wav2vec 2.0", detail: "Pretrained speech encoder · slower on CPU" },
+  { id: "wav2vec2", name: "wav2vec 2.0 · CREMA-D", detail: "Fine-tuned on CREMA-D · slower on CPU" },
+  { id: "wav2vec2_transfer", name: "wav2vec 2.0 · CREMA-D + RAVDESS", detail: "Fine-tuned on CREMA-D, then RAVDESS · slower on CPU" },
 ];
 const LABEL_COLORS = {
   anger: "#d86a55",
@@ -131,8 +132,8 @@ function App() {
               <svg viewBox="0 0 24 24"><path d="M4 14v-4m4 8V6m4 12V4m4 14V8m4 6v-4" /></svg>
             </div>
             <div>
-              <p className="method-title">Compare two speech models</p>
-              <p className="method-copy">Choose a compact MFCC + SVM baseline or a fine-tuned wav2vec 2.0 speech encoder.</p>
+              <p className="method-title">Compare three speech models</p>
+              <p className="method-copy">Compare the MFCC + SVM baseline with wav2vec 2.0 models fine-tuned on CREMA-D alone or CREMA-D followed by RAVDESS.</p>
             </div>
           </div>
 

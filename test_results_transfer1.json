@@ -1,0 +1,102 @@
+{
+  "experiment": "ravdess_wav2vec2_transfer_from_cremad_test",
+  "checkpoint": "D:\\SER-CAT\\work\\ravdess\\wav2vec2_experiments\\cremad_init_ravdess_seed_20261122\\best_model.pt",
+  "init_checkpoint_sha256": "e7efd80277e616d9c8efc70ea581bffc824bbfb42d1156319c5bd7f94f0c4f8d",
+  "selected_epoch": 12,
+  "test_actor_ids": [
+    "16",
+    "17",
+    "19",
+    "24"
+  ],
+  "test_sample_count": 112,
+  "metrics": {
+    "macro_f1": 0.6935926488397637,
+    "accuracy": 0.7053571428571429,
+    "per_class": {
+      "anger": {
+        "precision": 0.7105263157894737,
+        "recall": 0.84375,
+        "f1-score": 0.7714285714285715,
+        "support": 32.0
+      },
+      "happiness": {
+        "precision": 0.8666666666666667,
+        "recall": 0.40625,
+        "f1-score": 0.5531914893617021,
+        "support": 32.0
+      },
+      "neutral": {
+        "precision": 0.5333333333333333,
+        "recall": 1.0,
+        "f1-score": 0.6956521739130435,
+        "support": 16.0
+      },
+      "sadness": {
+        "precision": 0.7931034482758621,
+        "recall": 0.71875,
+        "f1-score": 0.7540983606557377,
+        "support": 32.0
+      },
+      "accuracy": 0.7053571428571429,
+      "macro avg": {
+        "precision": 0.725907441016334,
+        "recall": 0.7421875,
+        "f1-score": 0.6935926488397637,
+        "support": 112.0
+      },
+      "weighted avg": {
+        "precision": 0.7534180278281912,
+        "recall": 0.7053571428571429,
+        "f1-score": 0.6932984309721524,
+        "support": 112.0
+      }
+    },
+    "confusion_matrix_labels": [
+      "anger",
+      "happiness",
+      "neutral",
+      "sadness"
+    ],
+    "confusion_matrix": [
+      [
+        27,
+        1,
+        3,
+        1
+      ],
+      [
+        11,
+        13,
+        3,
+        5
+      ],
+      [
+        0,
+        0,
+        16,
+        0
+      ],
+      [
+        0,
+        1,
+        8,
+        23
+      ]
+    ],
+    "sample_count": 112
+  },
+  "test_evaluated": true,
+  "training_or_model_selection_used_test": false,
+  "repeat_exploratory_test": true,
+  "caveat": "Repeat exploratory comparison: RAVDESS test actors 16, 17, 19 and 24 (112 clips) were already examined in the previous RAVDESS comparison, so this is not a fresh blind benchmark. All settings and the epoch were fixed on RAVDESS validation before this single test evaluation. Scores are not comparable with CREMA-D test scores.",
+  "hardware": {
+    "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "vram_gb": 8.0
+  },
+  "python_version": "3.14.3",
+  "torch_version": "2.11.0+cu128",
+  "transformers_version": "4.48.3",
+  "evaluation_seconds": 8.0,
+  "git_commit": "ee1a38ae0f9cc46cc5a0dd6c85ec8930d319367e"
+}
